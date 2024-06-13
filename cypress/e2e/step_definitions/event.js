@@ -1,0 +1,36 @@
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { eventPage } from "@pages/EventPage";
+
+When('the user clicks on create event and follows the prompt',()=>{
+    eventPage.create()
+    eventPage.country()
+    eventPage.nigeria()
+    eventPage.number()
+    eventPage.enter()
+    cy.wait(3000)
+    eventPage.password()
+    eventPage.enterPass()
+    eventPage.eventName()
+    eventPage.eventField()
+    eventPage.monthField()
+    eventPage.assertMonth()
+    eventPage.dateField()
+    eventPage.yearField()
+    eventPage.applyField()
+    eventPage.timeField()
+    eventPage.hourField()
+    eventPage.minuteField()
+    eventPage.ampmField()
+    eventPage.applyTime()
+    eventPage.venueName()
+    eventPage.description()
+    eventPage.private()
+    eventPage.free()
+    eventPage.next()
+    eventPage.anodanext()
+    eventPage.unrestricted()
+    eventPage.transfer()
+    eventPage.faceId()
+    eventPage.lastnext
+    
+})
