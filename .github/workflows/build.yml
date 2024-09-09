@@ -1,9 +1,46 @@
-- name: Slack Notification
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_CHANNEL: general
-        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: 'Post Content https://github.com/ShaddDev/liveet/actions/runs/${{github.run.id}}'
-        SLACK_TITLE: Liveet Web Test
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' # Specify Node.js version
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run Cypress tests
+      - name: Run Cypress tests
+        run: npx cypress run
+        continue-on-error: true # Allow tests to fail and proceed to Slack notification
+
+      # Send Slack notification
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: 'general'
+          SLACK_COLOR: ${{ job.status }} # 'good' for success, 'danger' for failure
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Test run completed. Check details here: https://github.com/ShaddDev/liveet/actions/runs/${{ github.run.id }}'
+          SLACK_TITLE: 'Cypress Test Report'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+
